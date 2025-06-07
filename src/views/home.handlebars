@@ -1,0 +1,93 @@
+<!-- views/home.hbs -->
+<main>
+  <!-- Hero Section -->
+  <div
+    class='hero'
+    style="background-image: url('https://source.unsplash.com/random/1600x900/?blog,writing')"
+  >
+    <div class='hero-content'>
+      <h1>Chào mừng đến với <span style='color:#60a5fa;'>My Blog</span></h1>
+      <p>Khám phá những câu chuyện, kinh nghiệm và kiến thức thú vị được chia sẻ mỗi ngày.</p>
+      <a href='#posts'>Xem bài viết</a>
+    </div>
+  </div>
+
+  <!-- Posts Section -->
+  <div id='posts' class='posts-section'>
+    <h2 class='section-title'>Bài viết mới nhất</h2>
+    {{#if error}}
+      <p style="color: red; text-align: center;">{{error}}</p>
+    {{/if}}
+    <div class='posts-grid'>
+      {{#if blogs}}
+        {{#each blogs}}
+          <div class='post-card'>
+            <img
+              src="{{#if this.image}}{{this.image}}{{else}}/uploads/default.jpg{{/if}}"
+              alt="{{this.title}}"
+              class='post-image'
+            />
+            <div class='post-content'>
+              <h3 class='post-title'>{{this.title}}</h3>
+              <p class='post-excerpt'>
+                {{#if this.content}}
+                  {{truncate this.content 100}}
+                {{else}}
+                  Không có nội dung.
+                {{/if}}
+              </p>
+              <div class='post-meta'>
+                {{formatDate this.createdAt}} • Tác giả: {{this.author}} • Danh mục: {{this.category.CategoryName}}
+              </div>
+              <a href='/blog/post/{{this._id}}' class='post-link'>Đọc thêm</a>
+            </div>
+          </div>
+        {{/each}}
+      {{else}}
+        <p style="text-align: center;">Chưa có bài viết nào.</p>
+      {{/if}}
+    </div>
+
+    <!-- Nút xem thêm bài viết -->
+    <div class='view-more-wrapper'>
+      <a href='/blog' class='view-more-btn'>Xem thêm bài viết</a>
+    </div>
+  </div>
+
+  <!-- Videos Section -->
+  <div class='videos-section'>
+    <h2 class='section-title'>Video mới nhất</h2>
+    <div class='videos-grid'>
+      <!-- Video 1 -->
+      <div class='video-item'>
+        <iframe
+          width='100%'
+          height='315'
+          src='https://www.youtube.com/embed/dQw4w9WgXcQ'
+          title='Video 1'
+          frameborder='0'
+          allowfullscreen
+        ></iframe>
+        <p class='video-title'>Khám phá công nghệ AI trong đời sống</p>
+      </div>
+
+      <!-- Video 2 -->
+      <div class='video-item'>
+        <iframe
+          width='100%'
+          height='315'
+          src='https://www.youtube.com/embed/tgbNymZ7vqY'
+          title='Video 2'
+          frameborder='0'
+          allowfullscreen
+        ></iframe>
+        <p class='video-title'>Ẩm thực Việt: Món ngon miền Trung</p>
+      </div>
+    </div>
+
+    <!-- Nút xem thêm video -->
+    <div class='view-more-wrapper'>
+      <a href='/video' class='view-more-btn'>Xem thêm video</a>
+    </div>
+  </div>
+</main>

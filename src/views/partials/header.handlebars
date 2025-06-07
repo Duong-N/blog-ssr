@@ -1,0 +1,45 @@
+<header>
+  <div class='header-container'>
+    <div class='logo'>
+      <a href='/'>My Blog</a>
+    </div>
+    <!-- Thanh tìm kiếm -->
+    <form class='search-form' action='/search' method='GET'>
+      <input type='text' name='q' placeholder='Tìm bài viết...' />
+      <button type='submit'>🔍</button>
+    </form>
+    <nav class='nav-menu'>
+      <ul>
+        <li><a href='/'>Home</a></li>
+        <!-- views/partials/header.ejs -->
+<!-- views/partials/header.hbs -->
+<!-- Menu Blog với danh mục xổ xuống -->
+<li class="dropdown">
+  <a href="/blog">Blog</a>
+        <!-- Menu Video với phân loại -->
+        <li class='dropdown'>
+          <a href='#'>Video ▾</a>
+          <ul class='dropdown-menu'>
+            <li><a href='/videos'>Video</a></li>
+          </ul>
+        </li>
+
+        {{#if user}}
+          <!-- Nếu đã đăng nhập -->
+          <li class='user-profile'>
+            <img src='{{user.avatar}}' alt='User Avatar' class='avatar' />
+            <ul class='dropdown-menu'>
+              <li><a href='/profile'>Profile</a></li>
+              <li><a href='/settings'>Settings</a></li>
+              <li><a href='/logout'>Logout</a></li>
+            </ul>
+          </li>
+        {{else}}
+          <!-- Nếu chưa đăng nhập -->
+          <li><a href='/login' class='auth-link'>Sign in</a></li>
+          <li><a href='/register' class='auth-link'>Sign up</a></li>
+        {{/if}}
+      </ul>
+    </nav>
+  </div>
+</header>

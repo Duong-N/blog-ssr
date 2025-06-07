@@ -1,0 +1,25 @@
+<div id='authForm'>
+  <h2>Login</h2>
+  <form action='/login' method='POST'>
+    <div class='form-group'>
+      <label for='email'>Email</label>
+      <input type='email' id='email' name='email' required />
+    </div>
+    <div class='form-group'>
+      <label for='password'>Password</label>
+      <input type='password' id='password' name='password' required />
+    </div>
+    <button type='submit'>Login</button>
+  </form>
+  <p>Forgot password? <a href='/login'>Take back</a></p>
+  {{#if message}}
+    <p class='success'>{{message}}</p>
+    <script>
+      setTimeout(() => { window.location.href = '/'; },2000);
+    </script>
+  {{/if}}
+  <!-- Hiển thị thông báo lỗi -->
+  {{#if error}}
+    <p class='error'>{{error}}</p>
+  {{/if}}
+</div>

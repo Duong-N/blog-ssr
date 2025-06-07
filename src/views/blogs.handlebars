@@ -1,0 +1,63 @@
+<main>
+  <!-- Blogs Section -->
+  <div class='blogs-section'>
+    <h2 class='section-title'>Tất cả bài viết</h2>
+
+    <!-- Category Filter -->
+    <div class='category-filter'>
+      <span class='filter-label'>Lọc theo danh mục:</span>
+      <div class='category-list'>
+        <a href='/blog' class='category-item {{#unless selectedCategory}}active{{/unless}}'>Tất cả</a>
+        {{#each categories}}
+          <a href='/blog?category={{this.CategoryName}}' class='category-item {{#if this.isActive}}active{{/if}}'>{{this.CategoryName}}</a>
+        {{/each}}
+      </div>
+    </div>
+
+    {{#if error}}
+      <p style="color: red; text-align: center;">{{error}}</p>
+    {{/if}}
+    <div class='blogs-grid'>
+      {{#if blogs}}
+        {{#each blogs}}
+          <div class='blog-card-horizontal'>
+            <img
+              src="{{#if this.image}}{{this.image}}{{else}}/uploads/default.jpg{{/if}}"
+              alt="{{this.title}}"
+              class='blog-image'
+            />
+            <div class='blog-content'>
+              <h3 class='blog-title'>{{this.title}}</h3>
+              <p class='blog-excerpt'>
+                {{#if this.content}}
+                  {{truncate this.content 150}}
+                {{else}}
+                  Không có nội dung.
+                {{/if}}
+              </p>
+              <div class='blog-meta'>
+                {{formatDate this.createdAt}} • Tác giả: {{this.author}} • Danh mục: {{this.category.CategoryName}}
+              </div>
+              <a href='/blog/post/{{this._id}}' class='blog-link'>Đọc thêm</a>
+            </div>
+          </div>
+        {{/each}}
+      {{else}}
+        <p style="text-align: center;">Chưa có bài viết nào.</p>
+      {{/if}}
+    </div>
+
+    <!-- Pagination -->
+    {{#if pagination}}
+      <div class='pagination'>
+        {{#if pagination.hasPrev}}
+          <a href='/blog?page={{pagination.prevPage}}{{#if selectedCategory}}&category={{selectedCategory}}{{/if}}' class='page-link'>Trang trước</a>
+        {{/if}}
+        <span class='page-info'>Trang {{pagination.currentPage}} / {{pagination.totalPages}}</span>
+        {{#if pagination.hasNext}}
+          <a href='/blog?page={{pagination.nextPage}}{{#if selectedCategory}}&category={{selectedCategory}}{{/if}}' class='page-link'>Trang sau</a>
+        {{/if}}
+      </div>
+    {{/if}}
+  </div>
+</main>

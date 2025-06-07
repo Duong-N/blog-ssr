@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/authForm.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/category.css">
+    <link rel="stylesheet" href="/css/blog.css"
+</head>
+<body class="bg-gray-100 font-sans">
+<body>
+    {{> header}} <!-- Gọi partial header -->
+    <main>
+        <div class="container">
+            {{{body}}} <!-- Nội dung động từ các trang (home, login,...) -->
+        </div>
+    </main>
+    {{> footer}} <!-- Gọi partial footer -->
+</body>
+</html>

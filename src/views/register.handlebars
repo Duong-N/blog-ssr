@@ -1,0 +1,33 @@
+<div id='authForm'>
+  <h2>Register</h2>
+  <form action='/register' method='POST' {{!-- enctype="multipart/form-data"--}}>
+    <div class='form-group'>
+      <label for='fullname'>Full Name</label>
+      <input type='text' id='fullname' name='fullname' required />
+    </div>
+    <div class='form-group'>
+      <label for='email'>Email</label>
+      <input type='email' id='email' name='email' value='admin1@gmail.com' required />
+    </div>
+    <div class='form-group'>
+      <label for='password'>Password</label>
+      <input type='password' id='password' name='password' required />
+    </div>
+    {{!-- <div class='form-group'>
+      <label for='avatar'>Avatar</label>
+      <input type='file' id='avatar' name='avatar' accept='image/*' />
+    </div> --}}
+    <button type='submit'>Register</button>
+  </form>
+  <p>Already have an account? <a href='/login'>Login here</a></p>
+  {{#if message}}
+    <p class='success'>{{message}}</p>
+    <script>
+      setTimeout(() => { window.location.href = '/login'; },2000);
+    </script>
+  {{/if}}
+  <!-- Hiển thị thông báo lỗi -->
+  {{#if error}}
+    <p class='error'>{{error}}</p>
+  {{/if}}
+</div>

@@ -1,0 +1,112 @@
+```html
+<h2>Tạo bài viết mới</h2>
+{{#if error}}
+  <p style="color: red;">{{error}}</p>
+{{/if}}
+{{#if message}}
+  <p style="color: green;">{{message}}</p>
+{{/if}}
+<form action="/admin/blog" method="POST" enctype="multipart/form-data">
+    <div>
+        <label for="title">Tiêu đề:</label>
+        <input type="text" id="title" name="title" required>
+    </div>
+    <div>
+        <label for="content">Nội dung:</label>
+        <textarea id="content" name="content" rows="5" required></textarea>
+    </div>
+    <div class="category-selector">
+        <label for="category">Danh mục:</label>
+        <input type="hidden" id="category" name="category" required>
+        <div class="category-input" onclick="toggleCategoryMenu()">
+            <span id="selected-category">Chọn danh mục</span>
+            <span class="arrow">▾</span>
+        </div>
+        <ul class="category-menu" id="category-menu">
+            {{#if categories}}
+                {{#each categories}}
+                    <li onclick="selectCategory('{{this._id}}', '{{this.CategoryName}}')">
+                        {{#if this.image}}
+                            <img src="{{this.image}}" alt="{{this.CategoryName}}" style="width: 20px; height: 20px; margin-right: 5px;">
+                        {{/if}}
+                        {{this.CategoryName}}
+                    </li>
+                {{/each}}
+            {{else}}
+                <li>Không có danh mục</li>
+            {{/if}}
+        </ul>
+    </div>
+    <div>
+        <label for="image">Ảnh bài viết:</label>
+        <input type="file" id="image" name="image" accept="image/*">
+    </div>
+    <div>
+        <label for="author">Tác giả:</label>
+        <input type="text" id="author" name="author">
+    </div>
+    <div>
+        <label for="featured">Bài viết nổi bật:</label>
+        <input type="checkbox" id="featured" name="featured" value="true">
+    </div>
+    <button type="submit">Đăng bài</button>
+</form>
+
+<h2>Danh sách bài viết</h2>
+<ul>
+    {{#if blogs}}
+        {{#each blogs}}
+            <li>
+                <a href="/blog/post/{{this._id}}">{{this.title}}</a>
+                {{#if this.image}}
+                    <img src="{{this.image}}" alt="{{this.title}}" style="width: 50px; height: 50px;">
+                {{/if}}
+                <button onclick="deleteBlog('{{this._id}}')">Xóa</button>
+            </li>
+        {{/each}}
+    {{else}}
+        <li>Không có bài viết</li>
+    {{/if}}
+</ul>
+
+<script>
+function toggleCategoryMenu() {
+    const menu = document.getElementById('category-menu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+function selectCategory(id, name) {
+    const hiddenInput = document.getElementById('category');
+    const selectedCategory = document.getElementById('selected-category');
+    hiddenInput.value = id;
+    selectedCategory.textContent = name;
+    toggleCategoryMenu();
+}
+
+document.addEventListener('click', (event) => {
+    const menu = document.getElementById('category-menu');
+    const input = document.querySelector('.category-input');
+    if (!input.contains(event.target) && !menu.contains(event.target)) {
+        menu.style.display = 'none';
+    }
+});
+
+async function deleteBlog(id) {
+    if (confirm('Bạn có chắc muốn xóa bài viết này?')) {
+        try {
+            const response = await fetch(`/admin/blog/${id}`, {
+                method: 'DELETE',
+            });
+            if (response.ok) {
+                alert('Xóa bài viết thành công!');
+                window.location.reload(); // Tải lại trang để cập nhật danh sách
+            } else {
+                const error = await response.text();
+                alert(`Lỗi: ${error}`);
+            }
+        } catch (error) {
+            alert(`Lỗi: ${error.message}`);
+        }
+    }
+}
+</script>

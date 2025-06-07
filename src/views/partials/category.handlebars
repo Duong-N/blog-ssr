@@ -1,0 +1,80 @@
+{{! views/partials/category.hbs }}
+<div class="card">
+    <h2>Quản lý danh mục</h2>
+    
+    <!-- Form to add/edit category -->
+    <form id="categoryForm" action="/admin/category" method="POST">
+        <input type="hidden" id="categoryId" name="categoryId" value="{{categoryToEdit._id}}">
+        <div class="form-group">
+            <label for="CategoryName">Tên danh mục</label>
+            <input 
+                type="text" 
+                id="CategoryName" 
+                name="CategoryName" 
+                placeholder="Nhập tên danh mục" 
+                class="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value="{{categoryToEdit.name}}"
+                required
+            >
+        </div>
+        <button 
+            type="submit" 
+            class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300"
+        >
+            {{#if categoryToEdit._id}}Cập nhật{{else}}Thêm danh mục{{/if}}
+        </button>
+        {{#if categoryToEdit._id}}
+            <a 
+                href="/admin/category" 
+                class="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition duration-300 ml-4"
+            >
+                Hủy
+            </a>
+        {{/if}}
+    </form>
+    
+    <!-- Hiển thị thông báo -->
+    {{#if message}}
+        <p class="success">{{message}}</p>
+        <script>
+            setTimeout(() => { window.location.href = '/admin/category'; }, 2000);
+        </script>
+    {{/if}}
+    {{#if error}}
+        <p class="error">{{error}}</p>
+    {{/if}}
+
+    <!-- Categories table -->
+    <div class="overflow-x-auto mt-8">
+        <table class="w-full table-auto border-collapse">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="px-4 py-3 text-left text-gray-600 font-semibold">Tên danh mục</th>
+                    <th class="px-4 py-3 text-left text-gray-600 font-semibold">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each categories}}
+                    <tr class="border-b border-gray-200">
+                        <td class="px-4 py-3 text-gray-700">{{this.CategoryName}}</td>
+                        <td class="px-4 py-3">
+                            <form action="/admin/category/delete/{{this._id}}" method="POST" style="display:inline;">
+                                <button 
+                                    type="submit" 
+                                    class="delete-btn" 
+                                    onclick="return confirm('Bạn có chắc muốn xóa danh mục này?')"
+                                >
+                                    Xóa
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {{else}}
+                    <tr>
+                        <td colspan="2" class="px-4 py-3 text-gray-700 text-center">Chưa có danh mục nào</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>

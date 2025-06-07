@@ -1,0 +1,23 @@
+<body class="bg-gray-100 font-sans">
+  <div class="admin-container">
+    <nav class="admin-sidebar">
+      <ul>
+        <li><a href="/admin/category">Quản lý danh mục</a></li>
+        <li><a href="/admin/blog">Quản lý bài viết</a></li>
+        <li><a href="/admin/videos">Quản lý video</a></li>
+        <li><a href="/admin/users">Quản lý người dùng</a></li>
+        <li><a href="/admin/settings">Cài đặt</a></li>
+      </ul>
+    </nav>
+    <main class="admin-content">
+      <div class="container mt-4">
+        {{#if partialContent}}
+          {{> (lookup . 'partialContent') }}
+        {{else}}
+          <h2>Chào mừng bạn đến trang quản trị</h2>
+          <p>Vui lòng chọn một chức năng ở menu bên trái để bắt đầu.</p>
+        {{/if}}
+      </div>
+    </main>
+  </div>
+</body>

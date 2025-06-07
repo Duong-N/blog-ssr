@@ -1,0 +1,211 @@
+/* Reset default styles to match main style.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Card container */
+.card {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    margin: 40px auto;
+    margin-top: 200px;
+    max-width: 1200px;
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Heading */
+.card h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Form styling */
+#categoryForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding: 0 20px;
+}
+
+@media (min-width: 640px) {
+    #categoryForm {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+#categoryName {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #333;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#categoryName:focus {
+    outline: none;
+    border-color: #1e90ff;
+    box-shadow: 0 0 0 2px rgba(30, 144, 255, 0.3);
+}
+
+#categoryForm button[type="submit"] {
+    padding: 12px 24px;
+    background: #1e90ff;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(30, 144, 255, 0.3);
+}
+
+#categoryForm button[type="submit"]:hover {
+    background: #1c86ee;
+    transform: translateY(-3px);
+}
+
+#cancelEdit {
+    padding: 12px 24px;
+    background: #888;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+#cancelEdit:hover {
+    background: #666;
+    transform: translateY(-3px);
+}
+
+#cancelEdit.hidden {
+    display: none;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    color: #333;
+}
+
+thead tr {
+    background: #f9f9fb;
+}
+
+th {
+    padding: 12px 16px;
+    text-align: left;
+    color: #222;
+    font-weight: 600;
+}
+
+/* Căn cột Hành động sang phải */
+th:nth-child(2),
+td:nth-child(2) {
+    text-align: right; /* Căn phải cho cột Hành động */
+}
+
+tbody tr {
+    border-bottom: 1px solid #e5e7eb;
+    /* Bỏ hiệu ứng hover */
+}
+
+td {
+    padding: 12px 16px;
+    color: #333;
+}
+
+/* Nút trong cột Hành động */
+td button {
+    color: #fff; /* Chữ trắng */
+    border: none;
+    border-radius: 5px; /* Bo góc nhẹ */
+    padding: 8px 16px; /* Tăng kích thước so với 6px 12px */
+    font-size: 0.85rem; /* Chữ hơi lớn hơn một chút */
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Hiệu ứng mượt */
+    margin-right: 8px; /* Khoảng cách giữa các nút */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Hiệu ứng nổi nhẹ */
+    width: 70px; /* Kích thước cố định, bằng nhau */
+}
+
+/* Nút Sửa */
+td button:first-child {
+    background: #60A5FA; /* Màu xanh dương nhạt */
+}
+
+/* Nút Xóa */
+td button:last-child {
+    background: #F87171; /* Màu đỏ nhẹ */
+}
+
+td button:hover {
+    transform: translateY(-2px); /* Nâng nhẹ khi hover */
+    text-decoration: none; /* Bỏ gạch chân */
+}
+
+/* Nút Sửa khi hover */
+td button:first-child:hover {
+    background: #3B82F6; /* Xanh đậm hơn khi hover */
+}
+
+/* Nút Xóa khi hover */
+td button:last-child:hover {
+    background: #EF4444; /* Đỏ đậm hơn khi hover */
+}
+
+/* Responsive table */
+.overflow-x-auto {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 20px;
+}
+
+/* Fade-in animation to match main style.css */
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* New style for success message */
+.success {
+    color: #28a745;
+    background-color: #d4edda;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Style for error message */
+.error {
+    color: #dc2626;
+    background-color: #f8d7da;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: 500;
+}
