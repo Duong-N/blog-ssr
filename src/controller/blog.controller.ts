@@ -6,7 +6,7 @@ import blogModel from '../module/blogModel';
 import categoryModel from '../module/categoryModel';
 import fs from 'fs';
 import path from 'path';
-
+import { Types } from 'mongoose'; // Thêm để sử dụng ObjectId
 // Hiển thị trang chủ (bài viết mới nhất)
 
 
@@ -54,13 +54,13 @@ export const createBlog = async (req: Request, res: Response) => {
             });
         }
 
-        const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+        const imageFileName = req.file ? req.file.filename : null; // Chỉ lưu tên file
 
         const newBlog = new blogModel({
             title: blogData.title,
             content: blogData.content,
             category: blogData.category,
-            image: imagePath,
+            image: imageFileName, // Lưu tên file thay vì đường dẫn
             author: blogData.author || 'Admin',
             featured: blogData.featured || false
         });
@@ -109,7 +109,6 @@ export const getBlogById = async (req: Request, res: Response) => {
     }
 };
 
-// Xóa bài viết
 export const deleteBlogById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
@@ -126,12 +125,17 @@ export const deleteBlogById = async (req: Request, res: Response) => {
             });
         }
         if (deletedBlog.image) {
-            const imagePath = path.join(__dirname, '..', '..', 'public','uploads'); // Tạo đường dẫn chính xác
-            fs.unlink(imagePath, (err) => {
-                if (err) console.error('Lỗi khi xóa ảnh:', err);
-            });
+            const imagePath = path.join(__dirname, '..', '..', 'public', 'Uploads', deletedBlog.image);
+            try {
+                // Kiểm tra file tồn tại trước khi xóa
+                await fs.promises.access(imagePath, fs.constants.F_OK);
+                await fs.promises.unlink(imagePath);
+            } catch (err) {
+                console.error('Lỗi khi xóa ảnh hoặc file không tồn tại:', err);
+                // Tiếp tục nếu file không tồn tại
+            }
         }
-        res.redirect('/admin/blog?message=Xóa bài viết thành công');
+        return res.redirect('/admin/blog?message=Xóa bài viết thành công');
     } catch (error) {
         console.error('Lỗi khi xóa bài viết:', error);
         const categories = await categoryModel.find().lean();
@@ -147,25 +151,44 @@ export const deleteBlogById = async (req: Request, res: Response) => {
     }
 };
 export const AllBlog = async (req: Request, res: Response) => {
-  // Xử lý query parameter 'category'
-  const category = typeof req.query.category === 'string' ? req.query.category : undefined;
+  const categoryName = typeof req.query.category === 'string' ? req.query.category : undefined;
+  const searchQuery = typeof req.query.q === 'string' ? req.query.q.trim() : '';
   const page = parseInt(req.query.page as string) || 1;
-  const limit = 10; // Số bài viết mỗi trang
+  const limit = 2;
 
   try {
-    // Lấy tất cả danh mục
-    const categories = await categoryModel.find();
+    // Lấy tất cả danh mục và thêm thuộc tính isActive
+    const categories = await categoryModel.find().lean();
+    const categoriesWithActive = categories.map(cat => ({
+      ...cat,
+      isActive: categoryName === cat.CategoryName
+    }));
 
     // Xây dựng query cho MongoDB
-    const query: { 'category.CategoryName'?: string } = {};
-    if (category) {
-      query['category.CategoryName'] = category;
+    const query: any = {};
+    let categoryId: Types.ObjectId | undefined;
+
+    // Tìm categoryId dựa trên categoryName
+    if (categoryName) {
+      const categoryDoc = await categoryModel.findOne({ CategoryName: categoryName });
+      if (categoryDoc) {
+        categoryId = categoryDoc._id as Types.ObjectId;
+        query.category = categoryId; // Lọc dựa trên ObjectId
+      }
+    }
+
+    // Thêm điều kiện tìm kiếm nếu có từ khóa
+    if (searchQuery) {
+      query.$or = [
+        { title: { $regex: searchQuery, $options: 'i' } },
+        { content: { $regex: searchQuery, $options: 'i' } }
+      ];
     }
 
     // Lấy danh sách bài viết
     const blogs = await blogModel
       .find(query)
-      .populate('category')
+      .populate('category', 'CategoryName') // Chỉ lấy CategoryName
       .skip((page - 1) * limit)
       .limit(limit);
 
@@ -182,11 +205,22 @@ export const AllBlog = async (req: Request, res: Response) => {
       nextPage: page + 1,
     };
 
-    // Render trang với dữ liệu
-    res.render('blogs', { blogs, categories, selectedCategory: category, pagination });
+    res.render('blogs', {
+      blogs,
+      categories: categoriesWithActive,
+      selectedCategory: categoryName,
+      pagination,
+      searchQuery,
+    });
   } catch (error) {
     console.error(error);
-    res.render('blogs', { blogs: [], categories: [], selectedCategory: category, error: 'Đã có lỗi xảy ra khi tải bài viết.' });
+    res.render('blogs', {
+      blogs: [],
+      categories: [],
+      selectedCategory: categoryName,
+      pagination: null,
+      error: 'Đã có lỗi xảy ra khi tải bài viết.',
+    });
   }
-}
+};
 

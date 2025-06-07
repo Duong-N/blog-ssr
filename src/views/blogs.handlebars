@@ -2,7 +2,11 @@
   <!-- Blogs Section -->
   <div class='blogs-section'>
     <h2 class='section-title'>Tất cả bài viết</h2>
-
+    <!-- Thanh tìm kiếm -->
+    <form class='search-form' action='/search' method='GET'>
+      <input type='text' name='q' placeholder='Tìm bài viết...' />
+      <button type='submit'>🔍</button>
+    </form>
     <!-- Category Filter -->
     <div class='category-filter'>
       <span class='filter-label'>Lọc theo danh mục:</span>
@@ -22,7 +26,7 @@
         {{#each blogs}}
           <div class='blog-card-horizontal'>
             <img
-              src="{{#if this.image}}{{this.image}}{{else}}/uploads/default.jpg{{/if}}"
+              src="{{#if this.image}}/uploads/{{this.image}}{{else}}/uploads/default.jpg{{/if}}"
               alt="{{this.title}}"
               class='blog-image'
             />

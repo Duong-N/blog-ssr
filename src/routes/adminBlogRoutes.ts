@@ -12,6 +12,6 @@ router.get('/', getBlogForm);
 router.post('/', upload.single('image'), createBlog);
 
 // Xóa bài viết
-router.delete('/:id', deleteBlogById);
+router.post('/delete/:id', deleteBlogById);
 
 export default router;

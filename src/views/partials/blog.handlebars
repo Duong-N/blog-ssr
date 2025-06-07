@@ -1,4 +1,3 @@
-```html
 <h2>Tạo bài viết mới</h2>
 {{#if error}}
   <p style="color: red;">{{error}}</p>
@@ -27,7 +26,7 @@
                 {{#each categories}}
                     <li onclick="selectCategory('{{this._id}}', '{{this.CategoryName}}')">
                         {{#if this.image}}
-                            <img src="{{this.image}}" alt="{{this.CategoryName}}" style="width: 20px; height: 20px; margin-right: 5px;">
+                            <img src="/uploads/{{this.image}}" alt="{{this.CategoryName}}" style="width: 20px; height: 20px; margin-right: 5px;">
                         {{/if}}
                         {{this.CategoryName}}
                     </li>
@@ -53,21 +52,50 @@
 </form>
 
 <h2>Danh sách bài viết</h2>
-<ul>
-    {{#if blogs}}
-        {{#each blogs}}
-            <li>
-                <a href="/blog/post/{{this._id}}">{{this.title}}</a>
-                {{#if this.image}}
-                    <img src="{{this.image}}" alt="{{this.title}}" style="width: 50px; height: 50px;">
-                {{/if}}
-                <button onclick="deleteBlog('{{this._id}}')">Xóa</button>
-            </li>
-        {{/each}}
-    {{else}}
-        <li>Không có bài viết</li>
-    {{/if}}
-</ul>
+<div class="overflow-x-auto mt-8">
+    <table class="w-full table-auto border-collapse">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Tiêu đề</th>
+                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Ảnh</th>
+                <th class="px-4 py-3 text-left text-gray-600 font-semibold">Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#if blogs}}
+                {{#each blogs}}
+                    <tr class="border-b border-gray-200">
+                        <td class="px-4 py-3 text-gray-700">
+                            <a href="/blog/post/{{this._id}}">{{this.title}}</a>
+                        </td>
+                        <td class="px-4 py-3 text-gray-700">
+                            {{#if this.image}}
+                                <img src="/Uploads/{{this.image}}" alt="{{this.title}}" style="width: 50px; height: 50px;">
+                            {{else}}
+                                Không có ảnh
+                            {{/if}}
+                        </td>
+                        <td class="px-4 py-3">
+                            <form action="/admin/blog/delete/{{this._id}}" method="POST" style="display:inline;">
+                                <button 
+                                    type="submit" 
+                                    class="delete-btn bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300"
+                                    onclick="return confirm('Bạn có chắc muốn xóa bài viết này?')"
+                                >
+                                    Xóa
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {{/each}}
+            {{else}}
+                <tr>
+                    <td colspan="3" class="px-4 py-3 text-gray-700 text-center">Chưa có bài viết nào</td>
+                </tr>
+            {{/if}}
+        </tbody>
+    </table>
+</div>
 
 <script>
 function toggleCategoryMenu() {

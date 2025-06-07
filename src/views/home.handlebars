@@ -1,4 +1,3 @@
-<!-- views/home.hbs -->
 <main>
   <!-- Hero Section -->
   <div
@@ -23,7 +22,7 @@
         {{#each blogs}}
           <div class='post-card'>
             <img
-              src="{{#if this.image}}{{this.image}}{{else}}/uploads/default.jpg{{/if}}"
+              src="{{#if this.image}}/uploads/{{this.image}}{{else}}/uploads/default.jpg{{/if}}"
               alt="{{this.title}}"
               class='post-image'
             />
