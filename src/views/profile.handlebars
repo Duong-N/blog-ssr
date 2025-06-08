@@ -1,0 +1,30 @@
+<h1>Cập nhật Profile</h1>
+{{#if error}}
+  <p style="color: red;">{{error}}</p>
+{{/if}}
+{{#if message}}
+  <p style="color: green;">{{message}}</p>
+{{/if}}
+<form action="/profile/update" method="POST" enctype="multipart/form-data">
+  <div>
+    <label for="fullname">Họ và tên:</label>
+    <input type="text" id="fullname" name="fullname" value="{{user.fullname}}" required>
+  </div>
+  <div>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" value="{{user.email}}" required>
+  </div>
+  <div>
+    <label for="password">Mật khẩu mới (để trống nếu không đổi):</label>
+    <input type="password" id="password" name="password">
+  </div>
+  <div>
+    <label for="avatar">Avatar:</label>
+    <input type="file" id="avatar" name="avatar" accept="image/jpeg,image/png,image/gif">
+    {{#if user.avatar}}
+      <img src="{{user.avatar}}" alt="Avatar" style="max-width: 100px; margin-top: 10px;">
+    {{/if}}
+  </div>
+  <button type="submit">Lưu thay đổi</button>
+</form>
+<a href="/logout">Đăng xuất</a>

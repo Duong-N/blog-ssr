@@ -7,6 +7,7 @@ import categoryModel from '../module/categoryModel';
 import fs from 'fs';
 import path from 'path';
 import { Types } from 'mongoose'; // Thêm để sử dụng ObjectId
+import userModel from '../module/userModel';
 // Hiển thị trang chủ (bài viết mới nhất)
 
 
@@ -157,11 +158,26 @@ export const AllBlog = async (req: Request, res: Response) => {
   const limit = 2;
 
   try {
+    // Lấy thông tin user từ session
+    const sessionUser = (req.session as { user?: SessionUser }).user;
+    let user = null;
+
+    if (sessionUser) {
+      const dbUser = await userModel.findOne({ email: sessionUser.email }).select('fullname email avatar').lean();
+      if (dbUser) {
+        user = {
+          fullname: dbUser.fullname,
+          email: dbUser.email,
+          avatar: dbUser.avatar || '/images/default-avatar.png',
+        };
+      }
+    }
+
     // Lấy tất cả danh mục và thêm thuộc tính isActive
     const categories = await categoryModel.find().lean();
     const categoriesWithActive = categories.map(cat => ({
       ...cat,
-      isActive: categoryName === cat.CategoryName
+      isActive: categoryName === cat.CategoryName,
     }));
 
     // Xây dựng query cho MongoDB
@@ -173,7 +189,7 @@ export const AllBlog = async (req: Request, res: Response) => {
       const categoryDoc = await categoryModel.findOne({ CategoryName: categoryName });
       if (categoryDoc) {
         categoryId = categoryDoc._id as Types.ObjectId;
-        query.category = categoryId; // Lọc dựa trên ObjectId
+        query.category = categoryId;
       }
     }
 
@@ -181,16 +197,17 @@ export const AllBlog = async (req: Request, res: Response) => {
     if (searchQuery) {
       query.$or = [
         { title: { $regex: searchQuery, $options: 'i' } },
-        { content: { $regex: searchQuery, $options: 'i' } }
+        { content: { $regex: searchQuery, $options: 'i' } },
       ];
     }
 
     // Lấy danh sách bài viết
     const blogs = await blogModel
       .find(query)
-      .populate('category', 'CategoryName') // Chỉ lấy CategoryName
+      .populate('category', 'CategoryName')
       .skip((page - 1) * limit)
-      .limit(limit);
+      .limit(limit)
+      .lean();
 
     // Đếm tổng số bài viết
     const totalBlogs = await blogModel.countDocuments(query);
@@ -211,6 +228,8 @@ export const AllBlog = async (req: Request, res: Response) => {
       selectedCategory: categoryName,
       pagination,
       searchQuery,
+      user, // Thêm user vào đây
+      error: null,
     });
   } catch (error) {
     console.error(error);
@@ -219,6 +238,7 @@ export const AllBlog = async (req: Request, res: Response) => {
       categories: [],
       selectedCategory: categoryName,
       pagination: null,
+      user: null,
       error: 'Đã có lỗi xảy ra khi tải bài viết.',
     });
   }

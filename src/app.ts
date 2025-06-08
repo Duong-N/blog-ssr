@@ -7,6 +7,7 @@ import session from 'express-session';
 import { sessionConfig } from './config/sessionConfig';
 import { injectUserToView } from './Middleware/middle';
 import { loadCategoriesForHeader } from './controller/category.controller';
+import { setUser } from './Middleware/middle';
 
 const app = express();
 connectDB();
@@ -53,7 +54,7 @@ app.use(session(sessionConfig));
 app.set('view engine', '.handlebars');
 app.set('views', resolve(__dirname, '..', 'src', 'views'));
 app.use(injectUserToView);
-
+app.use(setUser);
 // Routes
 app.use('/', router);
 app.use('/admin/blog', router); // Đảm bảo mount đúng prefix cho admin routes

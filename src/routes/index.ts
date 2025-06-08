@@ -5,6 +5,7 @@ import adminRoutes from './adminRoutes';
 import blogRoutes from './blogRoute';
 import { checkadmin } from '../Middleware/middle';
 import homeRoute from './homeRoute';
+import profileRoute from './profileRoute';
 
 const router = Router();
 
@@ -13,5 +14,6 @@ router.use(authRoutes); // /register, /login
 router.use('/admin', checkadmin, adminRoutes); // Route admin
 router.use(blogRoutes); // /, /blog/post/:id, /blog/category/:name
 router.use(homeRoute);
+router.use(profileRoute);
 
 export default router;

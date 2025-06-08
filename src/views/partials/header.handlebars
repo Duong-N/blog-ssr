@@ -11,24 +11,15 @@
 <!-- Menu Blog với danh mục xổ xuống -->
 <li class="dropdown">
   <a href="/blog">Blog</a>
-        <!-- Menu Video với phân loại -->
-        <li class='dropdown'>
-          <a href='#'>Video ▾</a>
-          <ul class='dropdown-menu'>
-            <li><a href='/videos'>Video</a></li>
+        {{#if user}}
+         <!-- Nếu đã đăng nhập -->
+        <li class="user-profile dropdown">
+          <img src="{{#if user.avatar}}{{user.avatar}}{{else}}/images/default-avatar.png{{/if}}" alt="User Avatar" class="avatar" aria-label="User profile">
+          <ul class="dropdown-menu">
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/logout">Logout</a></li>
           </ul>
         </li>
-
-        {{#if user}}
-          <!-- Nếu đã đăng nhập -->
-          <li class='user-profile'>
-            <img src='{{user.avatar}}' alt='User Avatar' class='avatar' />
-            <ul class='dropdown-menu'>
-              <li><a href='/profile'>Profile</a></li>
-              <li><a href='/settings'>Settings</a></li>
-              <li><a href='/logout'>Logout</a></li>
-            </ul>
-          </li>
         {{else}}
           <!-- Nếu chưa đăng nhập -->
           <li><a href='/login' class='auth-link'>Sign in</a></li>
